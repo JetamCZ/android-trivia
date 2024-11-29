@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.Serializable
+import eu.puhony.trivia.ui.screens.login.LoginScreen
 
 @Composable
 fun TriviaApp(
@@ -19,12 +20,16 @@ fun TriviaApp(
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = HomeScreen,
+            startDestination = LoginScreenUrl,
             modifier = androidx.compose.ui.Modifier.padding(innerPadding)
         )
         {
             composable<HomeScreen> {
                 Text(text = "Hello")
+            }
+
+            composable<LoginScreenUrl> {
+                LoginScreen()
             }
 
         }
@@ -34,3 +39,6 @@ fun TriviaApp(
 
 @Serializable
 object HomeScreen
+
+@Serializable
+object LoginScreenUrl
