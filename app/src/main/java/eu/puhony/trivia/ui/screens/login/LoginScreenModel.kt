@@ -10,14 +10,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import eu.puhony.trivia.TriviaApplication
-import eu.puhony.trivia.data.users.User
-import eu.puhony.trivia.data.users.UserDao
+import eu.puhony.trivia.data.Repository
 import kotlinx.coroutines.launch
 
 class LoginScreenModel(
-    private val userDao: UserDao
+    private val repository: Repository
 ): ViewModel() {
-    val allUsers = userDao.getAllUsers()
+    val allUsers = repository.allUsers //userDao.getAllUsers()
 
     var username by mutableStateOf("")
         private set
@@ -31,7 +30,7 @@ class LoginScreenModel(
         val username = this.username
 
         viewModelScope.launch {
-            userDao.insert(User(username = username))
+            repository.getOrCreateUser(username)
         }
     }
 
@@ -41,8 +40,7 @@ class LoginScreenModel(
                 val application = this[APPLICATION_KEY] as TriviaApplication
 
                 LoginScreenModel(
-                    //todoDao = application.database.todoDao(),
-                    userDao = application.database.userDao()
+                    repository = application.repository
                 )
             }
         }
