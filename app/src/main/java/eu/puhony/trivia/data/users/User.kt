@@ -8,8 +8,6 @@ import java.util.Date
 data class User(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val username: String,
 
-    //TODO: Can I assign default value automatically?
-    val createdAt: Date,
+    val username: String,
 )

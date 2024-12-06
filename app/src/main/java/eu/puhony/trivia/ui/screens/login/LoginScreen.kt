@@ -1,13 +1,18 @@
 package eu.puhony.trivia.ui.screens.login
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -16,8 +21,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    viewModel: LoginScreenModel = viewModel(),
+    viewModel: LoginScreenModel = viewModel(factory = LoginScreenModel.Factory),
 ) {
+    val users by viewModel.allUsers.collectAsState(initial = emptyList())
+
     Column(modifier = modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 20.dp)) {
         Text(
             text ="Welcome in Trivia app",
@@ -52,10 +59,21 @@ fun LoginScreen(
         )
 
         Button(
-            onClick = {},
+            onClick = {viewModel.createUserName()},
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Continue as ${viewModel.username}")
+        }
+
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(users) {user ->
+                Button(onClick = {}) {
+                    Text(text = user.username)
+                }
+            }
         }
     }
 }
