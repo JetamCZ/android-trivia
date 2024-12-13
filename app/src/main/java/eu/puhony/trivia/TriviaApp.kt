@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.Serializable
 import eu.puhony.trivia.ui.screens.login.LoginScreen
 import eu.puhony.trivia.ui.screens.quiz.QuizScreen
+import eu.puhony.trivia.ui.screens.list.ListScreen
 
 @Composable
 fun TriviaApp(
@@ -25,32 +26,29 @@ fun TriviaApp(
             modifier = androidx.compose.ui.Modifier.padding(innerPadding)
         )
         {
-            composable<HomeScreen> {
-                Text(text = "Hello")
-            }
-
             composable<LoginScreenUrl> {
                 LoginScreen(
-                    onLogin = {navController.navigate(QuizUrl)}
+                    onLogin = {navController.navigate(ListScreenUrl)}
                 )
             }
 
             composable<QuizUrl> {
-                QuizScreen(
+                QuizScreen()
+            }
 
-                )
+            composable<ListScreenUrl>{
+                ListScreen()
             }
 
         }
     }
 }
 
-
-@Serializable
-object HomeScreen
-
 @Serializable
 object LoginScreenUrl
 
 @Serializable
 object QuizUrl
+
+@Serializable
+object ListScreenUrl

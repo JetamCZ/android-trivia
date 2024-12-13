@@ -29,6 +29,7 @@ fun LoginScreen(
     Column(modifier = modifier
         .fillMaxWidth()
         .padding(horizontal = 10.dp, vertical = 20.dp)) {
+
         Text(
             text = "Welcome in Trivia app",
             fontSize = 30.sp,
@@ -42,6 +43,19 @@ fun LoginScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(top = 40.dp)
         )
+
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(users) { user ->
+                Button(onClick = {
+                    viewModel.continueAsUser(user, onLogin)
+                }) {
+                    Text(text = "Continue as ${user.username}")
+                }
+            }
+        }
 
         Text(
             text = "Or login as a new user...",
@@ -63,23 +77,11 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                viewModel.createUserName()
-                onLogin()
+                viewModel.createUsername(onLogin)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Continue as ${viewModel.username}")
-        }
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(users) { user ->
-                Button(onClick = {}) {
-                    Text(text = user.username)
-                }
-            }
+            Text(text = "Add ${viewModel.username}")
         }
     }
 }

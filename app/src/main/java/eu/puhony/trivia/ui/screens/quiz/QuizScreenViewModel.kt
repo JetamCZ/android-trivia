@@ -43,13 +43,14 @@ class QuizScreenViewModel(
         if(index < 0) return
 
         val current : Question = uiState.value.questions.get(index)
+        val answers : List<String> = current.incorrect_answers + current.correct_answer
 
         _quizState.update { newState -> newState.copy(
             currentQuestionIndex = index,
             currentQuestion = QuestionUiModel(
                 question = current.question,
                 correctAnswer = current.correct_answer,
-                answers = current.incorrect_answers + current.correct_answer
+                answers = answers.shuffled()
             ),
         )}
     }
