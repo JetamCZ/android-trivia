@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.Serializable
 import eu.puhony.trivia.ui.screens.login.LoginScreen
+import eu.puhony.trivia.ui.screens.quiz.QuizScreen
 
 @Composable
 fun TriviaApp(
@@ -29,7 +30,15 @@ fun TriviaApp(
             }
 
             composable<LoginScreenUrl> {
-                LoginScreen()
+                LoginScreen(
+                    onLogin = {navController.navigate(QuizUrl)}
+                )
+            }
+
+            composable<QuizUrl> {
+                QuizScreen(
+
+                )
             }
 
         }
@@ -42,3 +51,6 @@ object HomeScreen
 
 @Serializable
 object LoginScreenUrl
+
+@Serializable
+object QuizUrl
