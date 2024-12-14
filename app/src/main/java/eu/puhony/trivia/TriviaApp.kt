@@ -3,13 +3,13 @@ package eu.puhony.trivia
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import eu.puhony.trivia.ui.screens.login.LoginScreen
 import eu.puhony.trivia.ui.screens.quiz.QuizScreen
@@ -33,11 +33,16 @@ fun TriviaApp(
             }
 
             composable<QuizUrl> {
-                QuizScreen()
+                val args = it.toRoute<QuizUrl>()
+                QuizScreen(quizId = args.quizId)
             }
 
             composable<ListScreenUrl>{
-                ListScreen()
+                ListScreen(
+                    onQuizSelect = {
+                        navController.navigate(QuizUrl(quizId = it))
+                    }
+                )
             }
 
         }
@@ -48,7 +53,9 @@ fun TriviaApp(
 object LoginScreenUrl
 
 @Serializable
-object QuizUrl
+data class QuizUrl (
+    val quizId: Int
+)
 
 @Serializable
 object ListScreenUrl

@@ -25,28 +25,31 @@ import eu.puhony.trivia.data.quiz.Quiz
 
 @Composable
 fun ListScreen(
-    modifier: Modifier  = Modifier,
+    modifier: Modifier = Modifier,
+    onQuizSelect: (quizId: Int) -> Unit,
     viewModel: ListScreenViewModel = viewModel(factory = ListScreenViewModel.Factory)
 ) {
     val quizes by viewModel.allQuizes.collectAsState(initial = emptyList())
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Text(
             text = "Select trivia",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(quizes.size) { index ->
                 QuizItem(quiz = quizes[index], onClick = {
-
+                    onQuizSelect(it)
                 })
             }
         }
@@ -54,11 +57,13 @@ fun ListScreen(
 }
 
 @Composable
-fun QuizItem(quiz: Quiz, onClick: () -> Unit) {
+fun QuizItem(quiz: Quiz, onClick: (id: Int) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .clickable {
+                onClick(quiz.id)
+            },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFBB86FC))
     ) {

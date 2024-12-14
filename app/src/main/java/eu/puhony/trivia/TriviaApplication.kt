@@ -34,7 +34,7 @@ class TriviaApplication : Application() {
         super.onCreate()
 
         applicationScope.launch {
-            database.clearAllTables()
+            //database.clearAllTables()
 
             database.quizDao().insert(Quiz(
                 id = 0,

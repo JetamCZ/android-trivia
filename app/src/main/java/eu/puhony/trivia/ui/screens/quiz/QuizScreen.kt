@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun QuizScreen(
+    quizId: Int,
     viewModel: QuizScreenViewModel = viewModel(factory = QuizScreenViewModel.Factory),
 ) {
     val state = viewModel.uiState.collectAsState()
