@@ -1,7 +1,6 @@
 package eu.puhony.trivia.data
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import eu.puhony.trivia.api.Question
 import eu.puhony.trivia.api.TriviaApi
 import eu.puhony.trivia.data.quiz.Quiz
@@ -33,7 +32,7 @@ class Repository(
         return newUser //.copy(id = userId.toString().toInt())
     }
 
-    fun getQuizById(quizId: Int): LiveData<Quiz> {
+    suspend fun getQuizById(quizId: Int): Quiz? {
         return quizDao.getById(quizId)
     }
 

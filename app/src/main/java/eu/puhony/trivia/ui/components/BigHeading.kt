@@ -15,6 +15,7 @@ fun BigHeading(
     Text(
         text = title,
         fontSize = 30.sp,
+        lineHeight = 36.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(bottom = 16.dp)
     )

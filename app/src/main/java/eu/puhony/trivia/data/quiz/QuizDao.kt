@@ -16,5 +16,5 @@ interface QuizDao {
     fun getAll(): Flow<List<Quiz>>
 
     @Query("SELECT * from quizes WHERE id = :quizId")
-    fun getById(quizId: Int): LiveData<Quiz>
+    suspend fun getById(quizId: Int): Quiz?
 }
