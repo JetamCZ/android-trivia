@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import eu.puhony.trivia.data.quiz.Quiz
+import eu.puhony.trivia.ui.components.BigHeading
+import eu.puhony.trivia.ui.components.LayoutColumn
 
 @Composable
 fun ListScreen(
@@ -31,17 +33,8 @@ fun ListScreen(
 ) {
     val quizes by viewModel.allQuizes.collectAsState(initial = emptyList())
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "Select trivia",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+    LayoutColumn {
+        BigHeading("Select trivia")
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),

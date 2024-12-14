@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import eu.puhony.trivia.ui.screens.QuizDetail.QuizDetailScreen
 import kotlinx.serialization.Serializable
 import eu.puhony.trivia.ui.screens.login.LoginScreen
 import eu.puhony.trivia.ui.screens.quiz.QuizScreen
@@ -37,10 +38,15 @@ fun TriviaApp(
                 QuizScreen(quizId = args.quizId)
             }
 
+            composable<QuizDetailUrl> {
+                val args = it.toRoute<QuizUrl>()
+                QuizDetailScreen(quizId = args.quizId)
+            }
+
             composable<ListScreenUrl>{
                 ListScreen(
                     onQuizSelect = {
-                        navController.navigate(QuizUrl(quizId = it))
+                        navController.navigate(QuizDetailUrl(quizId = it))
                     }
                 )
             }
@@ -51,6 +57,11 @@ fun TriviaApp(
 
 @Serializable
 object LoginScreenUrl
+
+@Serializable
+data class QuizDetailUrl (
+    val quizId: Int
+)
 
 @Serializable
 data class QuizUrl (
