@@ -81,4 +81,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson) // Gson converter for JSON
     implementation(libs.logging.interceptor) // Optional: for logging network requests
+
+    implementation(libs.coil.compose)
 }

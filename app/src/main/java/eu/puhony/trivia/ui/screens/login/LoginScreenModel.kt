@@ -39,7 +39,6 @@ class LoginScreenModel(
         viewModelScope.launch {
             val user = repository.getOrCreateUser(username)
             MyConfiguration.loggedInUser = user
-            onLogin()
         }
     }
 
