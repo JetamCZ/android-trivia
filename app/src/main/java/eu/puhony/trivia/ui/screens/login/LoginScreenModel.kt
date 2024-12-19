@@ -10,7 +10,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import eu.puhony.trivia.TriviaApplication
+import eu.puhony.trivia.data.MyConfiguration
 import eu.puhony.trivia.data.Repository
+import eu.puhony.trivia.data.users.User
 import kotlinx.coroutines.launch
 
 class LoginScreenModel(
@@ -26,11 +28,17 @@ class LoginScreenModel(
         this.username = username
     }
 
-    fun createUserName() {
+    fun continueAsUser(user: User, onLogin: () -> Unit) {
+        MyConfiguration.loggedInUser = user
+        onLogin()
+    }
+
+    fun createUsername(onLogin: () -> Unit) {
         val username = this.username
 
         viewModelScope.launch {
-            repository.getOrCreateUser(username)
+            val user = repository.getOrCreateUser(username)
+            MyConfiguration.loggedInUser = user
         }
     }
 
