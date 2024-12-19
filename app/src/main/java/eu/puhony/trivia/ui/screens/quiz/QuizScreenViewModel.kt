@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import eu.puhony.trivia.TriviaApplication
 import eu.puhony.trivia.api.Question
 import eu.puhony.trivia.data.Repository
+import eu.puhony.trivia.data.quiz.Quiz
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -33,46 +34,54 @@ data class QuestionUiModel(
 )
 
 class QuizScreenViewModel(
-    private val repository: Repository
+    private val repository: Repository,
+    private val quizId: Int
 ) : ViewModel() {
+    private val _quiz = MutableStateFlow<Quiz?>(null)
+    val quiz: StateFlow<Quiz?> = _quiz
+
     private val _quizState = MutableStateFlow(QuizState())
     val uiState: StateFlow<QuizState> = _quizState
 
+
     private fun loadQuestion(index: Int) {
-        if(uiState.value.questions.count() - 1 < index) return
-        if(index < 0) return
+        if (uiState.value.questions.count() - 1 < index) return
+        if (index < 0) return
 
-        val current : Question = uiState.value.questions.get(index)
-        val answers : List<String> = current.incorrect_answers + current.correct_answer
+        val current: Question = uiState.value.questions.get(index)
+        val answers: List<String> = current.incorrect_answers + current.correct_answer
 
-        _quizState.update { newState -> newState.copy(
-            currentQuestionIndex = index,
-            currentQuestion = QuestionUiModel(
-                question = current.question,
-                correctAnswer = current.correct_answer,
-                answers = answers.shuffled()
-            ),
-        )}
+        _quizState.update { newState ->
+            newState.copy(
+                currentQuestionIndex = index,
+                currentQuestion = QuestionUiModel(
+                    question = current.question,
+                    correctAnswer = current.correct_answer,
+                    answers = answers.shuffled()
+                ),
+            )
+        }
     }
 
     fun reload() {
-        if(uiState.value.isLoading) return
+        if (uiState.value.isLoading) return
 
         viewModelScope.launch {
-            Log.d("LOADING", "QUESTIONS loading!")
-
             _quizState.update { newState ->
                 newState.copy(
                     isLoading = true
                 )
             }
 
-            val result = repository.fetchQuestions(amount = 10, category = null, difficulty = null, type = null)
-
-            Log.d("LOADING", "QUESTIONS loaded - ${result.isSuccess}!")
+            val result = repository.fetchQuestions(
+                amount = _quiz.value?.amount ?: 10,
+                category = _quiz.value?.category,
+                difficulty = _quiz.value?.difficulty,
+                type = _quiz.value?.type
+            )
 
             _quizState.update { newState ->
-                if(result.isSuccess) {
+                if (result.isSuccess) {
                     val questions: List<Question> = result.getOrDefault(emptyList())
 
                     newState.copy(
@@ -85,7 +94,7 @@ class QuizScreenViewModel(
                 } else {
                     newState.copy(
                         isLoading = false,
-                        error = "Nastala chyba při načítání..."
+                        error = "Error while loading the quiz..."
                     )
                 }
 
@@ -96,17 +105,21 @@ class QuizScreenViewModel(
     }
 
     init {
-        reload()
+        viewModelScope.launch {
+            _quiz.value = repository.getQuizById(quizId)
+            reload()
+        }
     }
 
     fun submitAnswer(answer: String) {
-        Log.d("QUIZ","LOG answer")
+        Log.d("QUIZ", "LOG answer")
 
         if (answer == uiState.value.currentQuestion?.correctAnswer) {
-            _quizState.update { newState -> newState.copy(
-                score = newState.score + 1
-            )}
-
+            _quizState.update { newState ->
+                newState.copy(
+                    score = newState.score + 1
+                )
+            }
             //Play some cool sound
         } else {
             //Play some less-cool sound
@@ -116,12 +129,13 @@ class QuizScreenViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
+        fun provideFactory(quizId: Int): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as TriviaApplication
 
                 QuizScreenViewModel(
-                    repository = application.repository
+                    repository = application.repository,
+                    quizId = quizId
                 )
             }
         }

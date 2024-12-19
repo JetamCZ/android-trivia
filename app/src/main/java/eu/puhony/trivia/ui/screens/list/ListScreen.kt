@@ -33,7 +33,7 @@ fun ListScreen(
 ) {
     val quizes by viewModel.allQuizes.collectAsState(initial = emptyList())
 
-    LayoutColumn {
+    LayoutColumn(modifier) {
         BigHeading("Select trivia")
 
         LazyColumn(

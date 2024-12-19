@@ -33,14 +33,19 @@ fun TriviaApp(
                 )
             }
 
-            composable<QuizUrl> {
-                val args = it.toRoute<QuizUrl>()
+            composable<QuizPlayUrl> {
+                val args = it.toRoute<QuizPlayUrl>()
                 QuizScreen(quizId = args.quizId)
             }
 
             composable<QuizDetailUrl> {
-                val args = it.toRoute<QuizUrl>()
-                QuizDetailScreen(quizId = args.quizId)
+                val args = it.toRoute<QuizDetailUrl>()
+                QuizDetailScreen(
+                    quizId = args.quizId,
+                    onQuizStart = {navController.navigate(QuizPlayUrl(
+                        quizId = args.quizId
+                    ))}
+                )
             }
 
             composable<ListScreenUrl>{
@@ -64,7 +69,7 @@ data class QuizDetailUrl (
 )
 
 @Serializable
-data class QuizUrl (
+data class QuizPlayUrl (
     val quizId: Int
 )
 

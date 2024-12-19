@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class QuizDetailViewModel (
-    quizId: Int,
+    private val quizId: Int,
     private val repository: Repository
 ) : ViewModel() {
     private val _quiz = MutableStateFlow<Quiz?>(null)
