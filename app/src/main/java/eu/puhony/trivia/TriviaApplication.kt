@@ -27,6 +27,7 @@ class TriviaApplication : Application() {
     val repository: Repository by lazy { Repository(
         userDao = database.userDao(),
         quizDao = database.quizDao(),
+        quizResultDao = database.quizResultDao(),
         api = api
     ) }
 
@@ -39,19 +40,22 @@ class TriviaApplication : Application() {
             database.quizDao().insert(Quiz(
                 id = 0,
                 title = "General knowlage",
-                amount = 10, category = 9, difficulty = null, type = null
+                amount = 10, category = 9, difficulty = null, type = null,
+                description = "Random general knowlage questions"
             ))
 
             database.quizDao().insert(Quiz(
                 id = 1,
-                title = "Any",
-                amount = 20, category = null, difficulty = null, type = null
+                title = "Geek comics",
+                amount = 20, category = 29, difficulty = null, type = null,
+                description = "Comics? Comics!"
             ))
 
             database.quizDao().insert(Quiz(
                 id = 2,
                 title = "Easy any",
-                amount = 20, category = null, difficulty = null, type = null
+                amount = 20, category = null, difficulty = null, type = null,
+                description = "Some easy questions, no stress..."
             ))
         }
 

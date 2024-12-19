@@ -35,7 +35,14 @@ fun TriviaApp(
 
             composable<QuizPlayUrl> {
                 val args = it.toRoute<QuizPlayUrl>()
-                QuizScreen(quizId = args.quizId)
+                QuizScreen(
+                    quizId = args.quizId,
+                    onFinish = {
+                        navController.navigate(QuizDetailUrl(
+                            quizId = args.quizId
+                        ))
+                    }
+                )
             }
 
             composable<QuizDetailUrl> {
@@ -55,6 +62,8 @@ fun TriviaApp(
                     }
                 )
             }
+
+            //TODO: Add quiz result screen!
 
         }
     }

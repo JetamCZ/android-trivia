@@ -3,6 +3,7 @@ package eu.puhony.trivia.ui.screens.quiz
 import BigLoading
 import ErrorScreen
 import android.text.Html
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,22 +14,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import eu.puhony.trivia.R
 import eu.puhony.trivia.ui.components.BigHeading
 
 @Composable
 fun QuizScreen(
     quizId: Int,
-    viewModel: QuizScreenViewModel = viewModel(factory = QuizScreenViewModel.provideFactory(quizId)),
+    onFinish: () -> Unit,
+    viewModel: QuizScreenViewModel = viewModel(factory = QuizScreenViewModel.provideFactory(quizId, onFinish)),
 ) {
     val state = viewModel.uiState.collectAsState()
     val quiz by viewModel.quiz.collectAsState()
@@ -39,8 +47,14 @@ fun QuizScreen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        BigHeading(title = quiz?.title ?: "")
+        Text(
+            text = quiz?.title ?: "",
+            fontSize = 30.sp,
+            lineHeight = 36.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 16.dp),
+            color = colorResource(id = R.color.glow_pink)
+        )
 
         if (state.value.isLoading) {
             BigLoading()
@@ -79,11 +93,15 @@ fun QuizScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     question.answers.forEach { answer ->
-                        Button(
+                        OutlinedButton(
                             onClick = { viewModel.submitAnswer(answer) },
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(88.dp)
+                                .padding(bottom = 16.dp),
+                            border = BorderStroke(1.dp, colorResource(id = R.color.glow_pink))
                         ) {
-                            Text(answer)
+                            Text(text = answer, color = colorResource(id = R.color.glow_pink))
                         }
                     }
                 }

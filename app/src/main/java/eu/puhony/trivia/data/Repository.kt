@@ -5,6 +5,8 @@ import eu.puhony.trivia.api.Question
 import eu.puhony.trivia.api.TriviaApi
 import eu.puhony.trivia.data.quiz.Quiz
 import eu.puhony.trivia.data.quiz.QuizDao
+import eu.puhony.trivia.data.quizResults.QuizResult
+import eu.puhony.trivia.data.quizResults.QuizResultDao
 import eu.puhony.trivia.data.users.User
 import eu.puhony.trivia.data.users.UserDao
 import kotlinx.coroutines.TimeoutCancellationException
@@ -15,7 +17,8 @@ import java.util.concurrent.TimeoutException
 class Repository(
     private val api: TriviaApi,
     private val userDao: UserDao,
-    private val quizDao: QuizDao
+    private val quizDao: QuizDao,
+    private val quizResultDao: QuizResultDao,
 ) {
     val allUsers: Flow<List<User>> = userDao.getAllUsers()
 
@@ -33,6 +36,19 @@ class Repository(
         val newUser = User(username = username)
         userDao.insert(newUser)
         return newUser //.copy(id = userId.toString().toInt())
+    }
+
+    suspend fun storeQuizResult(userId: Int, quizId: Int, score: Int) : QuizResult {
+        val result = QuizResult(
+            userId = userId,
+            quizId = quizId,
+            score = score,
+            completedAt = System.currentTimeMillis()
+        )
+
+        quizResultDao.insertQuizResult(result)
+
+        return result
     }
 
     suspend fun getQuizById(quizId: Int): Quiz? {

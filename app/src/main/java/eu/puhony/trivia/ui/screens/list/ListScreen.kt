@@ -17,10 +17,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import eu.puhony.trivia.R
 import eu.puhony.trivia.data.quiz.Quiz
 import eu.puhony.trivia.ui.components.BigHeading
 import eu.puhony.trivia.ui.components.LayoutColumn
@@ -58,7 +60,7 @@ fun QuizItem(quiz: Quiz, onClick: (id: Int) -> Unit) {
                 onClick(quiz.id)
             },
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFBB86FC))
+        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.glow_pink))
     ) {
         Column(
             modifier = Modifier
@@ -68,15 +70,11 @@ fun QuizItem(quiz: Quiz, onClick: (id: Int) -> Unit) {
             Text(
                 text = quiz.title,
                 style = MaterialTheme.typography.titleLarge,
-                color = Color.White
+                color = Color.White,
+                fontWeight = FontWeight.Bold
             )
             Text(
-                text = "Category: ${quiz.category}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White
-            )
-            Text(
-                text = "Questions: ${quiz.amount}",
+                text = "Category: ${quiz.description}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.White
             )

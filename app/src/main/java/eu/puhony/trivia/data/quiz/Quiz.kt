@@ -8,6 +8,8 @@ data class Quiz (
     @PrimaryKey(autoGenerate = false)
     val id: Int = 0,
 
+    val description: String,
+
     val title: String,
     val amount: Int?,
     val category: Int?,

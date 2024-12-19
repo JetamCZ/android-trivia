@@ -11,13 +11,13 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun BigHeading(
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = title,
         fontSize = 30.sp,
         lineHeight = 36.sp,
         fontWeight = FontWeight.Bold,
-        modifier = modifier.padding(bottom = 16.dp)
+        modifier = modifier.padding(bottom = 16.dp),
     )
 }
