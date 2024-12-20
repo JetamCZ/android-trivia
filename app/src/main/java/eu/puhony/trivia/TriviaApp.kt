@@ -62,7 +62,8 @@ fun TriviaApp(
                                 quizId = args.quizId
                             )
                         )
-                    }
+                    },
+                    onBackPressed = {navController.navigate(ListScreenUrl)}
                 )
             }
 
@@ -70,7 +71,8 @@ fun TriviaApp(
                 ListScreen(
                     onQuizSelect = {
                         navController.navigate(QuizDetailUrl(quizId = it))
-                    }
+                    },
+                    onBackPressed = {navController.navigate(LoginScreenUrl)}
                 )
             }
 
@@ -83,7 +85,10 @@ fun TriviaApp(
                         navController.navigate(QuizDetailUrl(
                             quizId = args.quizId
                         ))
-                    }
+                    },
+                    onBackPressed = {navController.navigate(QuizDetailUrl(
+                        quizId = args.quizId
+                    ))}
                 )
             }
 

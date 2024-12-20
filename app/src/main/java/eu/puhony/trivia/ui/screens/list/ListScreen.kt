@@ -1,5 +1,6 @@
 package eu.puhony.trivia.ui.screens.list
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,8 +32,11 @@ import eu.puhony.trivia.ui.components.LayoutColumn
 fun ListScreen(
     modifier: Modifier = Modifier,
     onQuizSelect: (quizId: Int) -> Unit,
-    viewModel: ListScreenViewModel = viewModel(factory = ListScreenViewModel.Factory)
+    viewModel: ListScreenViewModel = viewModel(factory = ListScreenViewModel.Factory),
+    onBackPressed: () -> Unit
 ) {
+    BackHandler(onBack = onBackPressed)
+
     val quizes by viewModel.allQuizes.collectAsState(initial = emptyList())
 
     LayoutColumn(modifier) {

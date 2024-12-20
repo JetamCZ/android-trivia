@@ -1,5 +1,6 @@
 package eu.puhony.trivia.ui.screens.QuizDetail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,8 +35,11 @@ import eu.puhony.trivia.ui.components.LayoutColumn
 fun QuizDetailScreen(
     quizId: Int,
     viewModel: QuizDetailViewModel = viewModel(factory = QuizDetailViewModel.provideFactory(quizId)),
-    onQuizStart: () -> Unit
+    onQuizStart: () -> Unit,
+    onBackPressed: () -> Unit
 ) {
+    BackHandler(onBack = onBackPressed)
+
     val quiz by viewModel.quiz.collectAsState()
     val bestScoreResults by viewModel.bestScoreResults.collectAsState()
 

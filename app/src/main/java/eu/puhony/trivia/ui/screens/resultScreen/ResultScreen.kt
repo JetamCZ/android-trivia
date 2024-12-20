@@ -1,5 +1,6 @@
 package eu.puhony.trivia.ui.screens.resultScreen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,8 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import eu.puhony.trivia.R
 import eu.puhony.trivia.data.MyConfiguration
 import eu.puhony.trivia.ui.components.LayoutColumn
-import eu.puhony.trivia.ui.screens.QuizDetail.QuizDetailViewModel
-import eu.puhony.trivia.ui.screens.quiz.QuestionItem
 
 @Composable
 fun ResultScreen(
@@ -40,7 +39,10 @@ fun ResultScreen(
             resultId
         )
     ),
+    onBackPressed: () -> Unit
 ) {
+    BackHandler(onBack = onBackPressed)
+
     val quiz by viewModel.quiz.collectAsState()
     val results by viewModel.results.collectAsState()
 
