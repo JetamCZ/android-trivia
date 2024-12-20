@@ -28,11 +28,6 @@ data class QuizState(
     val error: String? = null
 )
 
-data class QuestionItem (
-    val question: Question,
-    val wasRight: Boolean
-)
-
 data class QuestionUiModel(
     val question: String,
     val correctAnswer: String,
@@ -42,7 +37,7 @@ data class QuestionUiModel(
 class QuizScreenViewModel(
     private val repository: Repository,
     private val quizId: Int,
-    private val onFinish: () -> Unit
+    private val onFinish: (resultId: Int) -> Unit,
 ) : ViewModel() {
     private val _quiz = MutableStateFlow<Quiz?>(null)
     val quiz: StateFlow<Quiz?> = _quiz
@@ -146,10 +141,13 @@ class QuizScreenViewModel(
 
         if(_quizState.value.currentQuestionIndex + 1 >= _quizState.value.totalQuestions) {
             viewModelScope.launch {
-                repository.storeQuizResult(MyConfiguration.loggedInUser?.id ?: 0, quizId, _quizState.value.score)
+                val result = repository.storeQuizResult(
+                    MyConfiguration.loggedInUser?.id ?: 0,
+                    quizId,
+                    _quizState.value.score
+                )
 
-                //TODO: pass questing results and score for result screen
-                onFinish()
+                onFinish(result.id)
             }
         } else {
             loadQuestion(_quizState.value.currentQuestionIndex + 1)
@@ -157,7 +155,7 @@ class QuizScreenViewModel(
     }
 
     companion object {
-        fun provideFactory(quizId: Int, onFinish: () -> Unit): ViewModelProvider.Factory = viewModelFactory {
+        fun provideFactory(quizId: Int, onFinish: (resultId: Int) -> Unit): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as TriviaApplication
 

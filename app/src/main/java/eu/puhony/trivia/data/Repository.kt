@@ -34,8 +34,9 @@ class Repository(
 
         // Create and insert a new user
         val newUser = User(username = username)
-        userDao.insert(newUser)
-        return newUser //.copy(id = userId.toString().toInt())
+
+        val id = userDao.insert(newUser)
+        return newUser.copy(id = id.toInt())
     }
 
     suspend fun storeQuizResult(userId: Int, quizId: Int, score: Int) : QuizResult {
@@ -46,9 +47,13 @@ class Repository(
             completedAt = System.currentTimeMillis()
         )
 
-        quizResultDao.insertQuizResult(result)
+        val id = quizResultDao.insertQuizResult(result)
 
-        return result
+        return result.copy(id = id.toInt())
+    }
+
+    suspend fun getUserResults(quizId: Int, userId: Int): List<QuizResult> {
+        return quizResultDao.getResultsByUserIdAndQuizId(userId, quizId)
     }
 
     suspend fun getQuizById(quizId: Int): Quiz? {

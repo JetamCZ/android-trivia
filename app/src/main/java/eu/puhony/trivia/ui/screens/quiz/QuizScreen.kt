@@ -12,10 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -35,7 +31,7 @@ import eu.puhony.trivia.ui.components.BigHeading
 @Composable
 fun QuizScreen(
     quizId: Int,
-    onFinish: () -> Unit,
+    onFinish: (resultId: Int) -> Unit,
     viewModel: QuizScreenViewModel = viewModel(factory = QuizScreenViewModel.provideFactory(quizId, onFinish)),
 ) {
     val state = viewModel.uiState.collectAsState()

@@ -15,6 +15,9 @@ import kotlinx.serialization.Serializable
 import eu.puhony.trivia.ui.screens.login.LoginScreen
 import eu.puhony.trivia.ui.screens.quiz.QuizScreen
 import eu.puhony.trivia.ui.screens.list.ListScreen
+import eu.puhony.trivia.ui.screens.quiz.QuestionItem
+import eu.puhony.trivia.ui.screens.resultScreen.ResultScreen
+import kotlinx.serialization.Contextual
 
 @Composable
 fun TriviaApp(
@@ -29,18 +32,22 @@ fun TriviaApp(
         {
             composable<LoginScreenUrl> {
                 LoginScreen(
-                    onLogin = {navController.navigate(ListScreenUrl)}
+                    onLogin = { navController.navigate(ListScreenUrl) }
                 )
             }
 
             composable<QuizPlayUrl> {
                 val args = it.toRoute<QuizPlayUrl>()
+
                 QuizScreen(
                     quizId = args.quizId,
-                    onFinish = {
-                        navController.navigate(QuizDetailUrl(
-                            quizId = args.quizId
-                        ))
+                    onFinish = { resultId ->
+                        navController.navigate(
+                            QuizResultsScreen(
+                                quizId = args.quizId,
+                                resultId = resultId
+                            )
+                        )
                     }
                 )
             }
@@ -49,13 +56,17 @@ fun TriviaApp(
                 val args = it.toRoute<QuizDetailUrl>()
                 QuizDetailScreen(
                     quizId = args.quizId,
-                    onQuizStart = {navController.navigate(QuizPlayUrl(
-                        quizId = args.quizId
-                    ))}
+                    onQuizStart = {
+                        navController.navigate(
+                            QuizPlayUrl(
+                                quizId = args.quizId
+                            )
+                        )
+                    }
                 )
             }
 
-            composable<ListScreenUrl>{
+            composable<ListScreenUrl> {
                 ListScreen(
                     onQuizSelect = {
                         navController.navigate(QuizDetailUrl(quizId = it))
@@ -63,7 +74,18 @@ fun TriviaApp(
                 )
             }
 
-            //TODO: Add quiz result screen!
+            composable<QuizResultsScreen> {
+                val args = it.toRoute<QuizResultsScreen>()
+                ResultScreen(
+                    quizId = args.quizId,
+                    resultId = args.resultId,
+                    onContinue = {
+                        navController.navigate(QuizDetailUrl(
+                            quizId = args.quizId
+                        ))
+                    }
+                )
+            }
 
         }
     }
@@ -73,14 +95,20 @@ fun TriviaApp(
 object LoginScreenUrl
 
 @Serializable
-data class QuizDetailUrl (
+data class QuizDetailUrl(
     val quizId: Int
 )
 
 @Serializable
-data class QuizPlayUrl (
+data class QuizPlayUrl(
     val quizId: Int
 )
 
 @Serializable
 object ListScreenUrl
+
+@Serializable
+data class QuizResultsScreen(
+    val quizId: Int,
+    val resultId: Int
+)

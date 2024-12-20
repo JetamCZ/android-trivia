@@ -1,5 +1,6 @@
 package eu.puhony.trivia.api
 
+import kotlinx.serialization.Serializable
 import retrofit2.http.GET
 import retrofit2.http.Query
 

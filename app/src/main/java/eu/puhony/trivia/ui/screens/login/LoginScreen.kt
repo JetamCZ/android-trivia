@@ -76,7 +76,6 @@ fun LoginScreen(
             items(users) { user ->
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    //elevation = CardElevation
                 ) {
                     Row(
                         modifier = Modifier

@@ -21,7 +21,7 @@ import eu.puhony.trivia.ui.components.LayoutColumn
 @Composable
 fun QuizDetailScreen(
     quizId: Int,
-    viewModel: QuizDetailViewModel = viewModel(factory = QuizDetailViewModel.provideFactory(quizId)),
+    viewModel: QuizDetailViewModel = viewModel(factory = QuizDetailViewModel.provideFactory(quizId )),
     onQuizStart: () -> Unit
 ) {
     val quiz by viewModel.quiz.collectAsState()

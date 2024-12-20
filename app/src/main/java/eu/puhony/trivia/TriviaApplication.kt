@@ -57,6 +57,13 @@ class TriviaApplication : Application() {
                 amount = 20, category = null, difficulty = null, type = null,
                 description = "Some easy questions, no stress..."
             ))
+
+            database.quizDao().insert(Quiz(
+                id = 3,
+                title = "TESTING",
+                amount = 1, category = null, difficulty = null, type = null,
+                description = "debug"
+            ))
         }
 
         android.util.Log.d("TriviaApplication", "TriviaApplication is initialized")
