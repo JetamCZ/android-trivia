@@ -5,19 +5,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import eu.puhony.trivia.ui.screens.QuizDetail.QuizDetailScreen
+import eu.puhony.trivia.ui.screens.QuizDetail.QuizDetailViewModel
 import kotlinx.serialization.Serializable
 import eu.puhony.trivia.ui.screens.login.LoginScreen
 import eu.puhony.trivia.ui.screens.quiz.QuizScreen
 import eu.puhony.trivia.ui.screens.list.ListScreen
-import eu.puhony.trivia.ui.screens.quiz.QuestionItem
+import eu.puhony.trivia.ui.screens.quiz.QuizScreenViewModel
 import eu.puhony.trivia.ui.screens.resultScreen.ResultScreen
-import kotlinx.serialization.Contextual
+import eu.puhony.trivia.ui.screens.resultScreen.ResultScreenViewModel
 
 @Composable
 fun TriviaApp(
@@ -40,22 +42,25 @@ fun TriviaApp(
                 val args = it.toRoute<QuizPlayUrl>()
 
                 QuizScreen(
-                    quizId = args.quizId,
-                    onFinish = { resultId ->
-                        navController.navigate(
-                            QuizResultsScreen(
-                                quizId = args.quizId,
-                                resultId = resultId
-                            )
-                        )
-                    }
+                    viewModel = viewModel(
+                        factory = QuizScreenViewModel.provideFactory(
+                            quizId = args.quizId,
+                            onFinish = { resultId ->
+                                navController.navigate(
+                                    QuizResultsScreen(
+                                        quizId = args.quizId,
+                                        resultId = resultId
+                                    )
+                                )
+                            })
+                    ),
                 )
             }
 
             composable<QuizDetailUrl> {
                 val args = it.toRoute<QuizDetailUrl>()
                 QuizDetailScreen(
-                    quizId = args.quizId,
+                    viewModel = viewModel(factory = QuizDetailViewModel.provideFactory(args.quizId)),
                     onQuizStart = {
                         navController.navigate(
                             QuizPlayUrl(
@@ -63,7 +68,7 @@ fun TriviaApp(
                             )
                         )
                     },
-                    onBackPressed = {navController.navigate(ListScreenUrl)}
+                    onBackPressed = { navController.navigate(ListScreenUrl) }
                 )
             }
 
@@ -72,23 +77,34 @@ fun TriviaApp(
                     onQuizSelect = {
                         navController.navigate(QuizDetailUrl(quizId = it))
                     },
-                    onBackPressed = {navController.navigate(LoginScreenUrl)}
+                    onBackPressed = { navController.navigate(LoginScreenUrl) }
                 )
             }
 
             composable<QuizResultsScreen> {
                 val args = it.toRoute<QuizResultsScreen>()
                 ResultScreen(
-                    quizId = args.quizId,
                     resultId = args.resultId,
                     onContinue = {
-                        navController.navigate(QuizDetailUrl(
-                            quizId = args.quizId
-                        ))
+                        navController.navigate(
+                            QuizDetailUrl(
+                                quizId = args.quizId
+                            )
+                        )
                     },
-                    onBackPressed = {navController.navigate(QuizDetailUrl(
-                        quizId = args.quizId
-                    ))}
+                    viewModel = viewModel(
+                        factory = ResultScreenViewModel.provideFactory(
+                            quizId = args.quizId,
+                            resultId = args.resultId
+                        )
+                    ),
+                    onBackPressed = {
+                        navController.navigate(
+                            QuizDetailUrl(
+                                quizId = args.quizId
+                            )
+                        )
+                    }
                 )
             }
 

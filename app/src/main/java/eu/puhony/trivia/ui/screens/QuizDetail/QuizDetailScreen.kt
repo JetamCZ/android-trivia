@@ -26,15 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import eu.puhony.trivia.R
 import eu.puhony.trivia.ui.components.LayoutColumn
 
 @Composable
 fun QuizDetailScreen(
-    quizId: Int,
-    viewModel: QuizDetailViewModel = viewModel(factory = QuizDetailViewModel.provideFactory(quizId)),
+    viewModel: QuizDetailViewModel,
     onQuizStart: () -> Unit,
     onBackPressed: () -> Unit
 ) {

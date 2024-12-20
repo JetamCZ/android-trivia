@@ -30,9 +30,7 @@ import eu.puhony.trivia.ui.components.BigHeading
 
 @Composable
 fun QuizScreen(
-    quizId: Int,
-    onFinish: (resultId: Int) -> Unit,
-    viewModel: QuizScreenViewModel = viewModel(factory = QuizScreenViewModel.provideFactory(quizId, onFinish)),
+    viewModel: QuizScreenViewModel //= viewModel(factory = QuizScreenViewModel.provideFactory(quizId, onFinish)),
 ) {
     val state = viewModel.uiState.collectAsState()
     val quiz by viewModel.quiz.collectAsState()

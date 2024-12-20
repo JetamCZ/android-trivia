@@ -23,22 +23,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import eu.puhony.trivia.R
 import eu.puhony.trivia.data.MyConfiguration
 import eu.puhony.trivia.ui.components.LayoutColumn
 
 @Composable
 fun ResultScreen(
-    quizId: Int,
     resultId: Int,
     onContinue: () -> Unit,
-    viewModel: ResultScreenViewModel = viewModel(
-        factory = ResultScreenViewModel.provideFactory(
-            quizId,
-            resultId
-        )
-    ),
+    viewModel: ResultScreenViewModel,
     onBackPressed: () -> Unit
 ) {
     BackHandler(onBack = onBackPressed)
