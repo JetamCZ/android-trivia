@@ -7,6 +7,7 @@ import eu.puhony.trivia.data.quiz.Quiz
 import eu.puhony.trivia.data.quiz.QuizDao
 import eu.puhony.trivia.data.quizResults.QuizResult
 import eu.puhony.trivia.data.quizResults.QuizResultDao
+import eu.puhony.trivia.data.quizResults.UserWithBestScore
 import eu.puhony.trivia.data.users.User
 import eu.puhony.trivia.data.users.UserDao
 import kotlinx.coroutines.TimeoutCancellationException
@@ -58,6 +59,10 @@ class Repository(
 
     suspend fun getQuizById(quizId: Int): Quiz? {
         return quizDao.getById(quizId)
+    }
+
+    suspend fun getQuizBestResults(quizId: Int): List<UserWithBestScore> {
+        return quizResultDao.getBestScoresWithUsersByQuizId(quizId)
     }
 
     suspend fun fetchQuestions(
