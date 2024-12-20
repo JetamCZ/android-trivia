@@ -33,7 +33,7 @@ import eu.puhony.trivia.ui.components.LayoutColumn
 @Composable
 fun QuizDetailScreen(
     quizId: Int,
-    viewModel: QuizDetailViewModel = viewModel(factory = QuizDetailViewModel.provideFactory(quizId )),
+    viewModel: QuizDetailViewModel = viewModel(factory = QuizDetailViewModel.provideFactory(quizId)),
     onQuizStart: () -> Unit
 ) {
     val quiz by viewModel.quiz.collectAsState()
@@ -60,53 +60,63 @@ fun QuizDetailScreen(
 
         Text(text = quiz?.description ?: "", modifier = Modifier.padding(bottom = 16.dp))
 
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(bestScoreResults) { user ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+        if (bestScoreResults.size > 0) {
+            Text(
+                text = "Best scores",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 20.dp)
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(bestScoreResults) { user ->
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Image(
-                            painter = rememberImagePainter("https://robohash.org/${user.user.username}"),
-                            contentDescription = "User Avatar",
-                            modifier = Modifier.size(50.dp),
-                            contentScale = ContentScale.Crop
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = rememberImagePainter("https://robohash.org/${user.user.username}"),
+                                contentDescription = "User Avatar",
+                                modifier = Modifier.size(50.dp),
+                                contentScale = ContentScale.Crop
+                            )
 
-                        Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                            Spacer(modifier = Modifier.padding(horizontal = 8.dp))
 
-                        Text(
-                            text = user.user.username,
-                            fontSize = 21.sp,
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.weight(1f)
-                        )
+                            Text(
+                                text = user.user.username,
+                                fontSize = 21.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.weight(1f)
+                            )
 
-                        Text(
-                            text = "${user.bestScore} points",
-                            fontSize = 21.sp,
-                            textAlign = TextAlign.Right,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.weight(1f)
-                        )
+                            Text(
+                                text = "${user.bestScore} points",
+                                fontSize = 21.sp,
+                                textAlign = TextAlign.Right,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
                     }
                 }
             }
         }
 
-
         Button(
-            onClick={onQuizStart()},
-            modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
+            onClick = { onQuizStart() },
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.glow_pink)
             )
