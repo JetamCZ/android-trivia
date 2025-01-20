@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 class LoginScreenModel(
     private val repository: Repository
 ): ViewModel() {
-    val allUsers = repository.allUsers //userDao.getAllUsers()
+    val allUsers = repository.allUsers
 
     var username by mutableStateOf("")
         private set

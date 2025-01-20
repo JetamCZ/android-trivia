@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import eu.puhony.trivia.R
 
 @Composable
@@ -84,7 +84,7 @@ fun LoginScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
-                            painter = rememberImagePainter("https://robohash.org/${user.username}"),
+                            painter = rememberAsyncImagePainter("https://robohash.org/${user.username}"),
                             contentDescription = "User Avatar",
                             modifier = Modifier.size(50.dp),
                             contentScale = ContentScale.Crop
@@ -148,7 +148,7 @@ fun LoginScreen(
                 containerColor = colorResource(id = R.color.glow_pink) // Background color
             )
         ) {
-            Text(text = "Hello ${viewModel.username ?: "Traveler"}!")
+            Text(text = "Hello ${viewModel.username}!")
         }
     }
 }

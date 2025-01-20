@@ -29,7 +29,7 @@ fun TriviaApp(
         NavHost(
             navController = navController,
             startDestination = LoginScreenUrl,
-            modifier = androidx.compose.ui.Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding)
         )
         {
             composable<LoginScreenUrl> {
@@ -94,8 +94,7 @@ fun TriviaApp(
                     },
                     viewModel = viewModel(
                         factory = ResultScreenViewModel.provideFactory(
-                            quizId = args.quizId,
-                            resultId = args.resultId
+                            quizId = args.quizId
                         )
                     ),
                     onBackPressed = {

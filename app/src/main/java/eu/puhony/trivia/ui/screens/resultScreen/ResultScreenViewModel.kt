@@ -17,7 +17,6 @@ import kotlinx.coroutines.launch
 
 class ResultScreenViewModel (
     private val quizId: Int,
-    private val resultId: Int,
     private val repository: Repository
 ) : ViewModel() {
     private val _quiz = MutableStateFlow<Quiz?>(null)
@@ -33,14 +32,13 @@ class ResultScreenViewModel (
     }
 
     companion object {
-        fun provideFactory(quizId: Int, resultId: Int): ViewModelProvider.Factory = viewModelFactory {
+        fun provideFactory(quizId: Int): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as TriviaApplication
 
                 ResultScreenViewModel(
                     repository = application.repository,
-                    quizId = quizId,
-                    resultId = resultId
+                    quizId = quizId
                 )
             }
         }

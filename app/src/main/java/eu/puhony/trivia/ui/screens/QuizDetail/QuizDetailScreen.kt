@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import eu.puhony.trivia.R
 import eu.puhony.trivia.ui.components.LayoutColumn
 
@@ -86,7 +86,7 @@ fun QuizDetailScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Image(
-                                painter = rememberImagePainter("https://robohash.org/${user.user.username}"),
+                                painter = rememberAsyncImagePainter("https://robohash.org/${user.user.username}"),
                                 contentDescription = "User Avatar",
                                 modifier = Modifier.size(50.dp),
                                 contentScale = ContentScale.Crop
