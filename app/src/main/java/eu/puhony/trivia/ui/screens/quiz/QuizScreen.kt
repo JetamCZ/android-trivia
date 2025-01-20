@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,8 @@ fun QuizScreen(
 ) {
     val state = viewModel.uiState.collectAsState()
     val quiz by viewModel.quiz.collectAsState()
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -88,7 +91,7 @@ fun QuizScreen(
                 ) {
                     question.answers.forEach { answer ->
                         OutlinedButton(
-                            onClick = { viewModel.submitAnswer(answer) },
+                            onClick = { viewModel.submitAnswer(answer, context) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(88.dp)

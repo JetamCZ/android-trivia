@@ -1,5 +1,10 @@
 package eu.puhony.trivia.ui.screens.quiz
 
+import android.content.Context
+import android.media.MediaPlayer
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -7,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import eu.puhony.trivia.MainActivity
+import eu.puhony.trivia.R
 import eu.puhony.trivia.TriviaApplication
 import eu.puhony.trivia.api.Question
 import eu.puhony.trivia.data.MyConfiguration
@@ -118,7 +125,7 @@ class QuizScreenViewModel(
         }
     }
 
-    fun submitAnswer(answer: String) {
+    fun submitAnswer(answer: String, context: Context) {
         Log.d("QUIZ", "LOG answer")
 
         if (answer == _quizState.value.currentQuestion?.correctAnswer) {
@@ -134,12 +141,16 @@ class QuizScreenViewModel(
                     questions = updatedList
                 )
             }
+
             //Play some cool sound
+            vibrate(context, true)
+            MediaPlayer.create(context, R.raw.correct).start()
         } else {
-            //Play some less-cool sound
+            vibrate(context, false)
+            MediaPlayer.create(context, R.raw.wrong).start()
         }
 
-        if(_quizState.value.currentQuestionIndex + 1 >= _quizState.value.totalQuestions) {
+        if (_quizState.value.currentQuestionIndex + 1 >= _quizState.value.totalQuestions) {
             viewModelScope.launch {
                 val result = repository.storeQuizResult(
                     MyConfiguration.loggedInUser?.id ?: 0,
@@ -154,8 +165,28 @@ class QuizScreenViewModel(
         }
     }
 
+    fun vibrate(context: Context, wasCorrect: Boolean) {
+        val vibratorManager =
+            context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        val vibrator = vibratorManager.defaultVibrator
+
+        if (vibrator.hasVibrator()) {
+            if(wasCorrect) {
+                val pattern = longArrayOf(0, 50, 100, 50) // [delay, vibrate, pause, vibrate]
+                val vibrationEffect = VibrationEffect.createWaveform(pattern, -1) // No repeat
+                vibrator.vibrate(vibrationEffect)
+            } else {
+                val vibrationEffect = VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+    }
+
     companion object {
-        fun provideFactory(quizId: Int, onFinish: (resultId: Int) -> Unit): ViewModelProvider.Factory = viewModelFactory {
+        fun provideFactory(
+            quizId: Int,
+            onFinish: (resultId: Int) -> Unit
+        ): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as TriviaApplication
 
